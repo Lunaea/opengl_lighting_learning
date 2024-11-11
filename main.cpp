@@ -32,8 +32,8 @@ int main(int, char**){
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    GLFWwindow* window = glfwCreateWindow(SCR_HEIGHT, SCR_WIDTH, "Lighting Learning", nullptr, nullptr);
-    if (window = nullptr)
+    GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Lighting Learning", nullptr, nullptr);
+    if (window == nullptr)
     {
         std::cerr << "Unable to create GLFW window\n";
         glfwTerminate();
@@ -54,6 +54,8 @@ int main(int, char**){
     }
 
     glEnable(GL_DEPTH_TEST);
+
+    Shader shader{ "shaders/shader.vs", "shaders/shader.fs" };
 
     float vertices[] = {
         -0.5f, -0.5f, -0.5f, 
