@@ -131,7 +131,7 @@ int main(int, char**){
 
     while (!glfwWindowShouldClose(window))
     {
-        float currentFrame = glfwGetTime();
+        float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
 
@@ -152,6 +152,8 @@ int main(int, char**){
 
         glm::mat4 model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
+
+        lightingShader.setVec3("viewPos", camera.Position);
 
         glBindVertexArray(cubeVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
