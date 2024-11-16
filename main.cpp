@@ -162,6 +162,7 @@ int main(int, char**){
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
 
+        lightPos = {std::sin(currentFrame) * 3.0f, std::cos(currentFrame) * 1.5f, std::cos(currentFrame) * 3.0f};
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f));
