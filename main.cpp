@@ -141,13 +141,18 @@ int main(int, char**){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lightingShader.use();
-        lightingShader.setVec3("objectColor", 1.0f, 0.5f, 0.31f);
         lightingShader.setVec3("lightColor", 1.0f, 1.0f, 1.0f);
         lightingShader.setVec3("viewPos", camera.Position);
 
         // light properties
-        lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
-        lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
+        glm::vec3 lightColor{};
+        lightColor.x = static_cast<float>(std::sin(currentFrame * 2.0f));
+        lightColor.y = static_cast<float>(std::sin(currentFrame * 0.7f));
+        lightColor.z = static_cast<float>(std::sin(currentFrame * 1.3f));
+        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
+        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
+        lightingShader.setVec3("light.ambient", ambientColor);
+        lightingShader.setVec3("light.diffuse", diffuseColor);
         lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
 
         // material properties
@@ -175,11 +180,12 @@ int main(int, char**){
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
 
-        lightPos = {std::sin(currentFrame) * 3.0f, std::cos(currentFrame) * 1.5f, std::cos(currentFrame) * 3.0f};
+        //lightPos = {std::sin(currentFrame) * 3.0f, std::cos(currentFrame) * 1.5f, std::cos(currentFrame) * 3.0f};
         model = glm::mat4(1.0f);
         model = glm::translate(model, lightPos);
         model = glm::scale(model, glm::vec3(0.2f));
         lightCubeShader.setMat4("model", model);
+        lightCubeShader.setVec3("LightColor", lightColor);
 
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
