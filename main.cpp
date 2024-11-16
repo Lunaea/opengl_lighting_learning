@@ -149,17 +149,18 @@ int main(int, char**){
         lightColor.x = static_cast<float>(std::sin(currentFrame * 2.0f));
         lightColor.y = static_cast<float>(std::sin(currentFrame * 0.7f));
         lightColor.z = static_cast<float>(std::sin(currentFrame * 1.3f));
-        glm::vec3 diffuseColor = lightColor * glm::vec3(0.5f);
-        glm::vec3 ambientColor = diffuseColor * glm::vec3(0.2f);
-        lightingShader.setVec3("light.ambient", ambientColor);
-        lightingShader.setVec3("light.diffuse", diffuseColor);
-        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+        glm::vec3 diffuseColor = {0.61424f, 0.04136f, 0.04136f};
+        glm::vec3 ambientColor = {0.1745f, 0.01175f, 0.01175f};
+        glm::vec3 specularColor = {0.727811f, 0.626959f, 0.626959f};
+        lightingShader.setVec3("light.ambient", glm::vec3(1.0f));
+        lightingShader.setVec3("light.diffuse", glm::vec3(1.0f));
+        lightingShader.setVec3("light.specular", glm::vec3(1.0f));
 
         // material properties
-        lightingShader.setVec3("material.ambient", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.diffuse", 1.0f, 0.5f, 0.31f);
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
-        lightingShader.setFloat("material.shininess", 32.0f);
+        lightingShader.setVec3("material.ambient", ambientColor);
+        lightingShader.setVec3("material.diffuse", diffuseColor);
+        lightingShader.setVec3("material.specular", specularColor);
+        lightingShader.setFloat("material.shininess", 128.0f * 0.6f);
 
         lightingShader.setVec3("lightPos", lightPos);
 
