@@ -129,6 +129,7 @@ int main(int, char**){
     glEnableVertexAttribArray(2);
 
     unsigned int diffuseMap{ loadTexture("textures/container2.png") };
+    unsigned int specularMap{ loadTexture("textures/container2_specular.png") };
 
     stbi_set_flip_vertically_on_load(true);
 
@@ -152,24 +153,24 @@ int main(int, char**){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lightingShader.use();
+        lightingShader.setVec3("light.position", lightPos);
         lightingShader.setVec3("viewPos", camera.Position);
 
         // light properties
         lightingShader.setVec3("light.ambient", 0.2f, 0.2f, 0.2f);
         lightingShader.setVec3("light.diffuse", 0.5f, 0.5f, 0.5f);
         lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        lightingShader.setVec3("light.position", lightPos);
 
         // material properties
         lightingShader.setInt("material.diffuse", 0);
-        lightingShader.setVec3("material.specular", 0.5f, 0.5f, 0.5f);
+        lightingShader.setInt("material.specular", 1);
         lightingShader.setFloat("material.shininess", 64.0f);
 
         // texture properties
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, diffuseMap);
-
-        lightingShader.setVec3("lightPos", lightPos);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, specularMap);
 
         // view/projection transformations
         glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
