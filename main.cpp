@@ -129,7 +129,7 @@ int main(int, char**){
     glEnableVertexAttribArray(2);
 
     unsigned int diffuseMap{ loadTexture("textures/container2.png") };
-    unsigned int specularMap{ loadTexture("textures/container2_specular.png") };
+    unsigned int specularMap{ loadTexture("textures/lighting_maps_specular_color.png") };
 
     stbi_set_flip_vertically_on_load(true);
 
