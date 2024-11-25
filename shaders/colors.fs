@@ -14,6 +14,7 @@ struct Light {
     float quadratic;
     
     float cutOff;
+    float outerCutOff;
 };
 
 struct Material {
@@ -37,39 +38,34 @@ void main()
 
     // spotlight
     float theta = dot(lightDir, normalize(-light.direction));
+    float epsilon = light.cutOff - light.outerCutOff;
+    float intensity = clamp((theta - light.outerCutOff) / epsilon, 0.0f, 1.0f);
 
-    if (theta > light.cutOff)
-    {
-        // diffuse
-        vec3 norm = normalize(Normal);
-        float diff = max(dot(norm, lightDir), 0.0f);
-        vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
+    // diffuse
+    vec3 norm = normalize(Normal);
+    float diff = max(dot(norm, lightDir), 0.0f);
+    vec3 diffuse = light.diffuse * diff * vec3(texture(material.diffuse, TexCoords));
 
-        // ambient
-        vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
+    // ambient
+    vec3 ambient = light.ambient * vec3(texture(material.diffuse, TexCoords));
 
-        // specular
-        vec3 viewDir = normalize(viewPos - FragPos);
-        vec3 reflectDir = reflect(-lightDir, norm);
-        float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);
-        vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
+    // specular
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);
+    vec3 specular = light.specular * spec * vec3(texture(material.specular, TexCoords));
 
-        // emission
-        vec3 emission = vec3(texture(material.emission, TexCoords));
+    // emission
+    vec3 emission = vec3(texture(material.emission, TexCoords));
 
-        // attenuation
-        float distance = length(light.position - FragPos);
-        float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
+    // attenuation
+    float distance = length(light.position - FragPos);
+    float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
-        // ambient *= attenuation; // remove attenuation from ambient, as otherwise at large distances the light would be darker inside than outside the spotlight due to ambient term in else branch
-        diffuse *= attenuation;
-        specular *= attenuation;
+    ambient *= attenuation;
+    diffuse *= (attenuation * intensity);
+    specular *= (attenuation * intensity);
 
-
-
-        vec3 result = ambient + diffuse + specular; // + emission;
-        FragColor = vec4(result, 1.0f);
-    }
-    else
-        FragColor = vec4(light.ambient * vec3(texture(material.diffuse, TexCoords)), 1.0);
+    vec3 result = ambient + diffuse + specular; // + emission;
+    FragColor = vec4(result, 1.0f);
 }
