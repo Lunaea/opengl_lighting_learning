@@ -179,6 +179,11 @@ int main(int, char**){
         lightingShader.setFloat("light.linear", 0.09f);
         lightingShader.setFloat("light.quadratic", 0.032f);
 
+        // flashlight properties
+        lightingShader.setVec3("light.position", camera.Position);
+        lightingShader.setVec3("light.direction", camera.Front);
+        lightingShader.setFloat("light.cutOff", glm::cos(glm::radians(12.5f)));
+
         // material properties
         lightingShader.setInt("material.diffuse", 0);
         lightingShader.setInt("material.specular", 1);
@@ -215,6 +220,7 @@ int main(int, char**){
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
+        /*
         lightCubeShader.use();
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
@@ -227,6 +233,7 @@ int main(int, char**){
 
         glBindVertexArray(lightVAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+        */
 
         glfwSwapBuffers(window);
         glfwPollEvents();
