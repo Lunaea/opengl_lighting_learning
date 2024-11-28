@@ -228,20 +228,21 @@ int main(int, char**){
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
 
-        /*
         lightCubeShader.use();
         lightCubeShader.setMat4("projection", projection);
         lightCubeShader.setMat4("view", view);
 
         //lightPos = {std::sin(currentFrame) * 3.0f, std::cos(currentFrame) * 1.5f, std::cos(currentFrame) * 3.0f};
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, lightPos);
-        model = glm::scale(model, glm::vec3(0.2f));
-        lightCubeShader.setMat4("model", model);
-
         glBindVertexArray(lightVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-        */
+        for (unsigned int i = 0; i < 4; ++i)
+        {
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, pointLightPositions[i]);
+            model = glm::scale(model, glm::vec3(0.2f));
+            lightCubeShader.setMat4("model", model);
+
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
