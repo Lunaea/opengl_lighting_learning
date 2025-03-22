@@ -11,7 +11,7 @@ struct DirLight {
     vec3 specular;
 };
 
-structPointLight {
+struct PointLight {
     vec3 position;
 
     float constant;
@@ -72,6 +72,9 @@ void main()
     for (int i = 0; i < NR_POINT_LIGHTS; ++i)
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 
+    // Spot Light
+    //result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+
     FragColor = vec4(result, 1.0f);
 }
 
@@ -106,7 +109,7 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     float spec = pow(max(dot(viewDir, reflectDir), 0.0f), material.shininess);
 
     // attenuation
-    float distance = lenght(light.position - fragPos);
+    float distance = length(light.position - fragPos);
     float attenuation = 1.0f / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 
     // results
