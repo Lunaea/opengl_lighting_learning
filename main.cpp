@@ -7,6 +7,8 @@
 
 #include "shader.h"
 #include "camera.h"
+#include "Mesh.h"
+#include "Model.h"
 #include "stb_image.h"
 
 #include <iostream>
@@ -151,6 +153,7 @@ int main(int, char**){
     unsigned int diffuseMap{ loadTexture("textures/container2.png") };
     unsigned int specularMap{ loadTexture("textures/container2_specular.png") };
     unsigned int emissionMap{ loadTexture("textures/matrix3.png") };
+    Model backpack{ "models/backpack/backpack.obj" };
 
     // shader configuration
     lightingShader.use();
@@ -254,17 +257,7 @@ int main(int, char**){
         glm::mat4 model = glm::mat4(1.0f);
         lightingShader.setMat4("model", model);
 
-        glBindVertexArray(cubeVAO);
-        for (unsigned int i = 0; i < 10; ++i)
-        {
-            glm::mat4 model = glm::mat4(1.0f);
-            model = glm::translate(model, cubePositions[i]);
-            float angle = 20.0f * i;
-            model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
-            lightingShader.setMat4("model", model);
-
-            glDrawArrays(GL_TRIANGLES, 0, 36);
-        }
+        backpack.Draw(lightingShader);
 
         lightCubeShader.use();
         lightCubeShader.setMat4("projection", projection);
