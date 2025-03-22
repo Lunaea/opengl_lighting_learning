@@ -179,17 +179,13 @@ int main(int, char**){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         lightingShader.use();
-        lightingShader.setVec3("light.position", lightPos);
-        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
         lightingShader.setVec3("viewPos", camera.Position);
 
-        // light properties
-        lightingShader.setVec3("light.ambient", 0.1f, 0.1f, 0.1f);
-        lightingShader.setVec3("light.diffuse", 0.8f, 0.8f, 0.8f);
-        lightingShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-        lightingShader.setFloat("light.constant", 1.0f);
-        lightingShader.setFloat("light.linear", 0.09f);
-        lightingShader.setFloat("light.quadratic", 0.032f);
+        // directional light properties
+        lightingShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        lightingShader.setVec3("dirLight.ambient", 0.1f, 0.1f, 0.1f);
+        lightingShader.setVec3("dirLight.diffuse", 0.8f, 0.8f, 0.8f);
+        lightingShader.setVec3("dirLight.specular", 1.0f, 1.0f, 1.0f);
 
         // point light 1
         lightingShader.setVec3("pointLights[0].position", pointLightPositions[0]);
