@@ -36,7 +36,7 @@ struct SpotLight {
     vec3 specular;
 
     float cutOff;
-    float outerCutoff;
+    float outerCutOff;
 };
 
 struct Light {
