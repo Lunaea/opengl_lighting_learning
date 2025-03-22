@@ -20,6 +20,8 @@
 #include "shader.h"
 #include "stb_image.h"
 
+u_int TextureFromFile(const char* path, const std::string& directory);
+
 class Model
 {
 public:
@@ -28,6 +30,7 @@ public:
 
 private:
     // model data
+    std::vector<Texture> textures_loaded{};
     std::vector<Mesh> meshes{};
     std::string directory{};
 

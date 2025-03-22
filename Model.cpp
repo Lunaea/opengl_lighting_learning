@@ -34,7 +34,7 @@ void Model::processNode(aiNode* node, const aiScene* scene)
         processNode(node->mChildren[i], scene);
 }
 
-Mesh processMesh(aiMesh* mesh, const aiScene* scene)
+Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 {
     std::vector<Vertex> vertices{};
     std::vector<unsigned int> indices{};
@@ -87,17 +87,30 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
     {
         aiString str{};
         mat->GetTexture(type, i, &str);
+        bool skip{ false };
+        for(u_int j = 0; j < textures_loaded.size(); ++j)
+        {
+            if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
+            {
+                textures.push_back(textures_loaded[j]);
+                skip = true;
+                break;
+            }
+        }
+        if(!skip)
+        { // if texture hasn't been loaded already, load it
         Texture texture{};
         texture.id = TextureFromFile(str.C_Str(), directory);
         texture.type = typeName;
-        texture.path = str;
+        texture.path = str.C_Str();
         textures.push_back(texture);
+        textures_loaded.push_back(texture); // add to loaded textures
+        }
     }
-
     return textures;
 }
 
-u_int TextureFromFile(const char* path, const std::string& directory, bool gamma)
+u_int TextureFromFile(const char* path, const std::string& directory)
 {
     std::string filename = std::string(path);
     filename = directory + '/' + filename;
@@ -109,7 +122,7 @@ u_int TextureFromFile(const char* path, const std::string& directory, bool gamma
     u_char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
-        Glenum format{};
+        GLenum format{};
         if (nrComponents == 1)
             format = GL_RED;
         else if (nrComponents == 3)
