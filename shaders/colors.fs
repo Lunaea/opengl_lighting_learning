@@ -39,22 +39,6 @@ struct SpotLight {
     float outerCutOff;
 };
 
-struct Light {
-    vec3 position;
-    vec3 direction;
-
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-
-    float constant;
-    float linear;
-    float quadratic;
-    
-    float cutOff;
-    float outerCutOff;
-};
-
 struct Material {
     sampler2D diffuse;
     sampler2D specular;
@@ -69,7 +53,6 @@ in vec3 Normal;
 uniform DirLight dirLight;
 uniform PointLight pointLights[NR_POINT_LIGHTS];
 uniform SpotLight spotLight;
-uniform Light light;
 uniform Material material;
 uniform vec3 viewPos;
 
@@ -91,7 +74,7 @@ void main()
         result += CalcPointLight(pointLights[i], norm, FragPos, viewDir);
 
     // Spot Light
-    //result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
+    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);
 
     FragColor = vec4(result, 1.0f);
 }

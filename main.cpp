@@ -152,6 +152,11 @@ int main(int, char**){
     unsigned int specularMap{ loadTexture("textures/container2_specular.png") };
     unsigned int emissionMap{ loadTexture("textures/matrix3.png") };
 
+    // shader configuration
+    lightingShader.use();
+    lightingShader.setInt("material.diffuse", 0);
+    lightingShader.setInt("material.specular", 1);
+
     stbi_set_flip_vertically_on_load(true);
 
     glGenVertexArrays(1, &lightVAO);
@@ -232,8 +237,6 @@ int main(int, char**){
         lightingShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
 
         // material properties
-        lightingShader.setInt("material.diffuse", 0);
-        lightingShader.setInt("material.specular", 1);
         lightingShader.setInt("material.emission", 2);
         lightingShader.setFloat("material.shininess", 64.0f);
 
