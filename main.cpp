@@ -67,7 +67,7 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     // build and compile shaders
-    Shader shader("shaders/colors.vs", "shaders/colors.fs");
+    Shader shader("shaders/modelShader.vs", "shaders/modelShader.fs");
 
     // load models
     Model ourModel("models/backpack/backpack.obj");
