@@ -2,7 +2,7 @@
 
 void Model::Draw(Shader& shader)
 {
-    for(u_int i = 0; i < meshes.size(); ++i)
+    for(unsigned int i = 0; i < meshes.size(); ++i)
         meshes[i].Draw(shader);
 }
 
@@ -24,13 +24,13 @@ void Model::loadModel(std::string path)
 void Model::processNode(aiNode* node, const aiScene* scene)
 {
     // process all the node's meshes (if any)
-    for(u_int i = 0; i < node->mNumMeshes; ++i)
+    for(unsigned int i = 0; i < node->mNumMeshes; ++i)
     {
         aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
         meshes.push_back(processMesh(mesh, scene));
     }
     // then do the same for each of its children
-    for(u_int i = 0; i < node->mNumChildren; ++i)
+    for(unsigned int i = 0; i < node->mNumChildren; ++i)
         processNode(node->mChildren[i], scene);
 }
 
@@ -40,7 +40,7 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
     std::vector<unsigned int> indices{};
     std::vector<Texture> textures{};
 
-    for(u_int i = 0; i < mesh->mNumVertices; ++i)
+    for(unsigned int i = 0; i < mesh->mNumVertices; ++i)
     {
         Vertex vertex{};
         // process vertex positions, normals and texture coordinates
@@ -61,10 +61,10 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
         vertices.push_back(vertex);
     }
     // process indices
-    for(u_int i = 0; i < mesh->mNumFaces; ++i)
+    for(unsigned int i = 0; i < mesh->mNumFaces; ++i)
     {
         aiFace face{ mesh->mFaces[i] };
-        for(u_int j = 0; j < face.mNumIndices; ++j)
+        for(unsigned int j = 0; j < face.mNumIndices; ++j)
             indices.push_back(face.mIndices[j]);
     }
     // process material
@@ -83,12 +83,12 @@ Mesh Model::processMesh(aiMesh* mesh, const aiScene* scene)
 std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType type, std::string typeName)
 {
     std::vector<Texture> textures{};
-    for(u_int i = 0; i < mat->GetTextureCount(type); ++i)
+    for(unsigned int i = 0; i < mat->GetTextureCount(type); ++i)
     {
         aiString str{};
         mat->GetTexture(type, i, &str);
         bool skip{ false };
-        for(u_int j = 0; j < textures_loaded.size(); ++j)
+        for(unsigned int j = 0; j < textures_loaded.size(); ++j)
         {
             if(std::strcmp(textures_loaded[j].path.data(), str.C_Str()) == 0)
             {
@@ -110,16 +110,16 @@ std::vector<Texture> Model::loadMaterialTextures(aiMaterial* mat, aiTextureType 
     return textures;
 }
 
-u_int TextureFromFile(const char* path, const std::string& directory)
+unsigned int TextureFromFile(const char* path, const std::string& directory)
 {
     std::string filename = std::string(path);
     filename = directory + '/' + filename;
 
-    u_int textureID{};
+    unsigned int textureID{};
     glGenTextures(1, &textureID);
 
     int width, height, nrComponents;
-    u_char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
+    unsigned char* data = stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
     if (data)
     {
         GLenum format{};

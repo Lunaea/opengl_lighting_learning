@@ -20,12 +20,12 @@
 #include "shader.h"
 #include "stb_image.h"
 
-u_int TextureFromFile(const char* path, const std::string& directory);
+unsigned int TextureFromFile(const char* path, const std::string& directory);
 
 class Model
 {
 public:
-    Model(char* path) { loadModel(path); }
+    Model(const std::string& path) { loadModel(path); }
     void Draw(Shader& shader);
 
 private:
