@@ -16,8 +16,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
 
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1280;
+const unsigned int SCR_HEIGHT = 720;
 
 Camera camera{ glm::vec3(0.0f, 0.0f, 3.0f) };
 float lastX = SCR_WIDTH / 2.0f;
@@ -26,8 +26,6 @@ bool firstMouse = true;
 
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
-
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
 
 int main()
 {
@@ -75,6 +73,10 @@ int main()
     // draw in wireframe
     //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
+    shader.use();
+    shader.setInt("material.diffuse", 0);
+    shader.setInt("material.specular", 1);
+
     // render loop
     while (!glfwWindowShouldClose(window))
     {
@@ -93,6 +95,12 @@ int main()
 
         // enable shader before setting uniforms
         shader.use();
+        shader.setVec3("viewPos", camera.Position);
+        shader.setFloat("material.shininess", 32.0f);
+        shader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+        shader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+        shader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+        shader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
         // view/projection transformations
         glm::mat4 projection{ glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f) };
