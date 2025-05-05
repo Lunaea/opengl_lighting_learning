@@ -84,7 +84,8 @@ int main()
         float currentFrame = static_cast<float>(glfwGetTime());
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
-        glfwSetWindowTitle(window, ("LearnOpenGL FPS: " + std::to_string(1.0f / deltaTime)).c_str());
+        float fps{ 1.0f / deltaTime };
+        glfwSetWindowTitle(window, ("LearnOpenGL FPS: " + std::to_string(fps)).c_str());
 
         // input
         processInput(window);
